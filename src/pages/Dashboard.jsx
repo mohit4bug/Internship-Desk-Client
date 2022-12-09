@@ -144,9 +144,7 @@ const Dashboard = () => {
   });
 
   const handleChange = (event) => {
-    if (event.target.name === "edu") {
-      setIsSelected(true);
-    }
+    event.target.name === "edu" && setIsSelected(true)
     setInputs({ ...inputs, [event.target.name]: event.target.value })
   }
   const handleImage = (event) => {
@@ -171,18 +169,27 @@ const Dashboard = () => {
     formData.append("course", inputs?.course);
     formData.append("performance", inputs?.performance);
 
+
     try {
       const res = await axios.post("http://localhost:8000/details/personal", formData);
-      toast(res.data)
-
-    } catch (error) {
-      if(error.response.data.includes("Personal validation failed")){
-        toast("Fill all details!")
+      console.log(res.data);
+    }
+    catch (e) {
+      console.log(e);
+    }
+    if (isSelected) {
+      try {
+        const res = await axios.post("http://localhost:8000/details/educational", formData);
+        console.log(res.data);
       }
-      else{
-        toast("Something went wrong, please try again!")
+      catch (e) {
+        console.log(e);
       }
     }
+
+
+
+
 
 
   };
@@ -202,7 +209,8 @@ const Dashboard = () => {
               placeholder="First Name"
               name="firstName"
               onChange={handleChange}
-              required={true}
+              required
+
 
             />
           </InputDiv>
@@ -215,7 +223,8 @@ const Dashboard = () => {
               placeholder="Last Name"
               name="lastName"
               onChange={handleChange}
-              required={true}
+              required
+
 
             />
           </InputDiv>
@@ -223,7 +232,7 @@ const Dashboard = () => {
         <InputDiv>
           <Label htmlFor="profileImageLabel">Profile picture</Label>
           <ProfileLabel id="profileImageLabel" htmlFor="profileImage">
-            {inputs?.profileImage ? `${inputs?.profileImage.name}`: "Upload image"}
+            {inputs?.profileImage ? `${inputs?.profileImage.name}` : "Upload image"}
           </ProfileLabel>
           <input
             style={{ opacity: 0, pointerEvents: "none" }}
@@ -231,7 +240,7 @@ const Dashboard = () => {
             type="file"
             name="profileImage"
             onChange={handleImage}
-            required={true}
+            required
             accept="image/*"
           />
         </InputDiv>
@@ -239,7 +248,7 @@ const Dashboard = () => {
         <InputDiv>
           <Label htmlFor="gender">Gender</Label>
           <Select id="gender" name="gender" onChange={handleChange}
-            required={true}>
+          >
             <Option value="male">Male</Option>
             <Option value="female">Female</Option>
             <Option value="others">Others</Option>
@@ -264,7 +273,8 @@ const Dashboard = () => {
               style={{ flex: 3 }}
               name="mobile"
               onChange={handleChange}
-              required={true}
+              required
+
 
             />
           </FlexDiv>
@@ -280,7 +290,8 @@ const Dashboard = () => {
             placeholder="Current city"
             name="currCity"
             onChange={handleChange}
-            required={true}
+            required
+
 
           />
         </InputDiv>
@@ -296,14 +307,14 @@ const Dashboard = () => {
             placeholder="Second city"
             name="secondCity"
             onChange={handleChange}
-            required={true}
+
 
           />
         </InputDiv>
         <InputDiv>
           <Label htmlFor="edu">Current/highest level of education</Label>
           <Select id="edu" name="edu" onChange={handleChange}
-            required={true}>
+          >
             <Option>Select</Option>
             <Option value="graduation">Graduation</Option>
             <Option value="post graduation">Post graduation</Option>
@@ -320,7 +331,8 @@ const Dashboard = () => {
                   value="pursuing"
                   name="eduStatus"
                   onChange={handleChange}
-                  required={true}
+                  required
+
 
                 />
                 <Label>Pursuing</Label>
@@ -332,7 +344,8 @@ const Dashboard = () => {
                   value="completed"
                   name="eduStatus"
                   onChange={handleChange}
-                  required={true}
+                  required
+
 
                 />
                 <Label>Completed</Label>
@@ -347,7 +360,8 @@ const Dashboard = () => {
                   placeholder="E.g 2021"
                   name="startYear"
                   onChange={handleChange}
-                  required={true}
+                  required
+
 
                 />
               </InputDiv>
@@ -361,7 +375,8 @@ const Dashboard = () => {
                   placeholder="E.g 2024"
                   name="endYear"
                   onChange={handleChange}
-                  required={true}
+                  required
+
 
                 />
               </InputDiv>
@@ -375,7 +390,8 @@ const Dashboard = () => {
                   placeholder="E.g BCA, BTech"
                   name="course"
                   onChange={handleChange}
-                  required={true}
+                  required
+
 
                 />
               </InputDiv>
@@ -388,7 +404,8 @@ const Dashboard = () => {
                   placeholder="0.00"
                   name="performance"
                   onChange={handleChange}
-                  required={true}
+                  required
+
 
                 />
               </InputDiv>
@@ -397,7 +414,7 @@ const Dashboard = () => {
         )}
         <Button type="submit">Save & next</Button>
       </Form>
-      <Toaster/>
+      <Toaster />
     </Container>
   );
 };
