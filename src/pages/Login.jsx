@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+import axios from 'axios'
 
 
 const Container = styled.div`
@@ -72,16 +73,43 @@ const P = styled.p`
 
 
 const Login = () => {
+
+    const [inputs, setInputs] = useState({
+        email: '',
+        password: ''
+    })
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setInputs({
+            ...inputs,
+            [e.target.name]: value
+        });
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post("http://localhost:8000/api/auth/login", inputs,{
+                withCredentials:true
+            })
+            console.log(res.data);
+        } catch (error) {
+            console.log(error.response.data);
+        }
+
+    }
+
     return (
         <Container>
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 <InputDiv>
                     <Label htmlFor='eduEmail'>Email</Label>
-                    <Input id='eduEmail' type="email" placeholder='RegNo@poornima.edu.in' />
+                    <Input name="email" onChange={handleChange} id='eduEmail' type="email" placeholder='RegNo@poornima.edu.in' />
                 </InputDiv>
                 <InputDiv>
                     <Label htmlFor='password'>Password</Label>
-                    <Input id='password' type="password" placeholder='Must be atleast 8 characters' />
+                    <Input name="password" onChange={handleChange} id='password' type="password" placeholder='Must be atleast 8 characters' />
                 </InputDiv>
                 <InputDiv>
                     <Button type='submit'>Login</Button>

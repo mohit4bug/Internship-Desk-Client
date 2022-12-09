@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+import axios from "axios";
 
 
 const Container = styled.div`
@@ -78,26 +79,56 @@ const P = styled.p`
 `
 
 
+
+
+
 const Register = () => {
+
+    const [inputs, setInputs] = useState({
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+    })
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setInputs({
+            ...inputs,
+            [e.target.name]: value
+        });
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post("http://localhost:8000/api/auth/register", inputs)
+            console.log(res.data);
+        } catch (error) {
+            console.log(error.response.data);
+        }
+
+    }
+
     return (
         <Container>
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 <InputDiv>
                     <Label htmlFor='eduEmail'>Email</Label>
-                    <Input id='eduEmail' type="email" placeholder='RegNo@poornima.edu.in' />
+                    <Input onChange={handleChange} id='eduEmail' name='email' type="email" placeholder='RegNo@poornima.edu.in' />
                 </InputDiv>
                 <InputDiv>
                     <Label htmlFor='password'>Password</Label>
-                    <Input id='password' type="password" placeholder='Must be atleast 8 characters' />
+                    <Input onChange={handleChange} id='password' name="password" type="password" placeholder='Must be atleast 8 characters' />
                 </InputDiv>
                 <FlexDiv>
                     <InputDiv>
-                        <Label htmlFor='fName'>First Name</Label>
-                        <Input id='fName' type="text" placeholder='John' />
+                        <Label htmlFor='firstName'>First Name</Label>
+                        <Input onChange={handleChange} id='firstName' name="firstName" type="text" placeholder='John' />
                     </InputDiv>
                     <InputDiv>
-                        <Label htmlFor='fLame'>Last Name</Label>
-                        <Input id='lName' type="text" placeholder='Doe' />
+                        <Label htmlFor='lastName'>Last Name</Label>
+                        <Input onChange={handleChange} id='lastName' name="lastName" type="text" placeholder='Doe' />
                     </InputDiv>
                 </FlexDiv>
                 <InputDiv>
